@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Predictor</title>
+</head>
+<body>
+    <h1>Diabetes Predictor</h1>
+    <form id="prediction-form">
+        <label for="HighBP">High Blood Pressure:</label>
+        <input type="radio" id="HighBPYes" name="HighBP" value="Yes">
+        <label for="HighBP">Yes</label>
+        <input type="radio" id="HighBPNo" name="HighBP" value="No">
+        <label for="HighBP">No</label><br><br>
+
+        <label for="HighChol">High Cholesterol:</label>
+        <input type="radio" id="HighCholYes" name="HighChol" value="Yes">
+        <label for="HighChol">Yes</label>
+        <input type="radio" id="HighCholNo" name="HighChol" value="No">
+        <label for="HighChol">No</label><br><br>
+
+        <label for="CholCheck">Cholesterol Check:</label>
+        <input type="radio" id="HighBPYes" name="CholCheck" value="Yes">
+        <label for="CholCheck">Yes</label>
+        <input type="radio" id="CholCheckNo" name="CholCheck" value="No">
+        <label for="CholCheck">No</label><br><br>
+
+        <label for="Smoker">Smoking:</label>
+        <input type="radio" id="SmokerYes" name="Smoker" value="Yes">
+        <label for="Smoker">Yes</label>
+        <input type="radio" id="SmokerNo" name="Smoker" value="No">
+        <label for="Smoker">No</label><br><br>
+
+        <label for="Stroke">Stroke:</label>
+        <input type="radio" id="StrokeYes" name="Stroke" value="Yes">
+        <label for="Stroke">Yes</label>
+        <input type="radio" id="StrokeNo" name="Stroke" value="No">
+        <label for="Stroke">No</label><br><br>
+        
+
+        <label for="HeartDiseaseorAttack">Heart Disease or Attack :</label>
+        <input type="radio" id="HeartDiseaseorAttackYes" name="HeartDiseaseorAttack" value="Yes">
+        <label for="HeartDiseaseorAttack">Yes</label>
+        <input type="radio" id="HeartDiseaseorAttackNo" name="HeartDiseaseorAttack" value="No">
+        <label for="HeartDiseaseorAttack">No</label><br><br>
+
+        <label for="Sex">Sex:</label>
+        <input type="radio" id="SexMale" name="Sex" value="Male">
+        <label for="Sex">Yes</label>
+        <input type="radio" id="SexFemale" name="Sex" value="Female">
+        <label for="Sex">No</label><br><br>
+
+        <label for="Age">Age:</label>
+        <input type="number" id="Age" name="Age"><br><br>
+        
+        <!-- Add similar input fields for other parameters -->
+        
+        <button type="button" id="predict-button">Predict</button>
+    </form>
+    
+    <h2>Prediction:</h2>
+    <p id="prediction-result"></p>
+    
+    <script>
+        document.getElementById("predict-button").addEventListener("click", function() {
+            const formData = new FormData(document.getElementById("prediction-form"));
+            const data = {};
+    
+            // Map "Yes" and "No" values to 1 and 0
+            const valueMappings = {
+                "yes": "1",
+                "no": "0"
+            };
+    
+            formData.forEach((value, key) => {
+                // Use the valueMappings to convert "yes" and "no" to 1 and 0
+                data[key] = valueMappings[value];
+            });
+    
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById("prediction-result").innerText = `Prediction: ${result.prediction}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
